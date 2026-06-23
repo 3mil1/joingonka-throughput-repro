@@ -1,0 +1,66 @@
+{
+  "artifactFormatVersion": "joingonka-throughput-repro-v1",
+  "startedAt": "2026-06-23T21:16:08.444Z",
+  "finishedAt": "2026-06-23T21:18:34.554Z",
+  "elapsedMs": 146110,
+  "config": {
+    "baseUrl": "https://gate.joingonka.ai/v1",
+    "models": [
+      "MiniMaxAI/MiniMax-M2.7"
+    ],
+    "targetRps": 10,
+    "timeoutMs": 90000,
+    "maxTokens": 1024,
+    "limit": 1000,
+    "payloadPath": "/Users/3mil/Development/joingonka-throughput-repro/payloads.jsonl",
+    "startWindowMs": 99900,
+    "retries": 0,
+    "responseFormat": "json_object",
+    "passCriteria": [
+      "HTTP 200",
+      "response body is valid OpenAI-compatible JSON",
+      "message.content contains a parseable JSON object",
+      "content.decision is one of workplace|technical|go_to_market|other",
+      "content.confidence is one of low|medium|high",
+      "content.reason is a non-empty string"
+    ],
+    "secretWritten": false
+  },
+  "sent": 1000,
+  "ok": 94,
+  "failed": 906,
+  "byStatus": {
+    "200": 94,
+    "429": 149,
+    "502": 441,
+    "null": 316
+  },
+  "byFailureKind": {
+    "rate_limit": 149,
+    "timeout": 316,
+    "server_error": 441
+  },
+  "byModel": {
+    "MiniMaxAI/MiniMax-M2.7": {
+      "sent": 1000,
+      "ok": 94,
+      "failed": 906
+    }
+  },
+  "latencyMs": {
+    "average": 71937,
+    "p50": 74425,
+    "p95": 90003,
+    "p99": 90004,
+    "max": 90018
+  },
+  "okLatencyMs": {
+    "average": 61905,
+    "p50": 59563,
+    "p95": 88263,
+    "p99": 89501,
+    "max": 89501
+  },
+  "actualStartRps": 10.01001001001001,
+  "endToEndRequestsPerSecond": 6.844158510711107
+}
