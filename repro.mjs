@@ -132,7 +132,7 @@ function parseCompletion(content) {
   if (typeof content !== "string" || content.trim().length === 0) {
     return { ok: false, error: "empty content" };
   }
-  const trimmed = content.trim();
+  const trimmed = extractJsonObjectText(content.trim());
   let parsed;
   try {
     parsed = JSON.parse(trimmed);
@@ -165,6 +165,22 @@ function parseCompletion(content) {
       reason: reason.trim().slice(0, 500),
     },
   };
+}
+
+function extractJsonObjectText(content) {
+  const withoutThink = content.replace(/<think>[\s\S]*?<\/think>/giu, "").trim();
+  if (withoutThink.startsWith("{") && withoutThink.endsWith("}")) return withoutThink;
+
+  const fenced = withoutThink.match(/```(?:json)?\s*([\s\S]*?)```/iu);
+  if (fenced?.[1]) {
+    const fencedText = fenced[1].trim();
+    if (fencedText.startsWith("{") && fencedText.endsWith("}")) return fencedText;
+  }
+
+  const start = withoutThink.indexOf("{");
+  const end = withoutThink.lastIndexOf("}");
+  if (start >= 0 && end > start) return withoutThink.slice(start, end + 1);
+  return withoutThink;
 }
 
 async function runOne(input) {
@@ -383,7 +399,7 @@ async function main() {
     passCriteria: [
       "HTTP 200",
       "response body is valid OpenAI-compatible JSON",
-      "message.content parses as JSON",
+      "message.content contains a parseable JSON object",
       "content.decision is one of workplace|technical|go_to_market|other",
       "content.confidence is one of low|medium|high",
       "content.reason is a non-empty string",

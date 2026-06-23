@@ -11,7 +11,7 @@ prompt.
 ## Run
 
 ```bash
-cd provider-repros/joingonka-throughput-repro
+cd joingonka-throughput-repro
 GONKA_API_KEY='...' node repro.mjs
 ```
 
@@ -57,7 +57,8 @@ Each request is usable only when all of these are true:
 
 - HTTP status is `200`.
 - Response body is valid OpenAI-compatible JSON.
-- `choices[0].message.content` parses as JSON.
+- `choices[0].message.content` contains a parseable JSON object. The parser
+  tolerates common `<think>...</think>` or fenced-code wrappers around the JSON.
 - Parsed content has `decision`.
 - `decision` is one of `workplace`, `technical`, `go_to_market`, `other`.
 - Parsed content has `confidence`.
